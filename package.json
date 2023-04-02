@@ -1,6 +1,6 @@
 {
   "name": "workout-time",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Szerver oldali JavaScript házi feladat.",
   "main": "index.js",
   "scripts": {
@@ -10,5 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "rome": "^12.0.0"
   }
 }
