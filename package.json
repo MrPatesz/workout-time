@@ -1,0 +1,14 @@
+{
+  "name": "workout-time",
+  "version": "0.2.0",
+  "description": "Szerver oldali JavaScript házi feladat.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "author": "Patrik Ángyán",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
