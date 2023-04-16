@@ -1,0 +1,58 @@
+<%- include('common/header') -%>
+<h2>
+  <% if (typeof exercise === 'undefined') { %> Create <% } else { %> Edit <% }
+  %> Exercise
+</h2>
+<form method="POST">
+  <div class="form-group">
+    <label class="form-label" for="name">Name</label>
+    <input
+      class="form-control"
+      id="name"
+      name="name"
+      value="<%= (typeof exercise === 'undefined') ? '' : exercise.name %>"
+    />
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="targetMuscles">Target Muscles</label>
+    <input
+      class="form-control"
+      id="targetMuscles"
+      name="targetMuscles"
+      value="<%= (typeof exercise === 'undefined') ? '' : exercise.targetMuscles %>"
+    />
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="sets">Sets</label>
+    <input
+      class="form-control"
+      id="sets"
+      name="sets"
+      value="<%= (typeof exercise === 'undefined') ? '' : exercise.sets %>"
+    />
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="reps">Reps</label>
+    <input
+      class="form-control"
+      id="reps"
+      name="reps"
+      value="<%= (typeof exercise === 'undefined') ? '' : exercise.reps %>"
+    />
+  </div>
+
+  <div class="d-flex justify-content-end mt-2">
+    <button
+      class="btn btn-secondary me-2"
+      type="button"
+      onclick="location.href='/exercises/<%= workout._id %>'"
+    >
+      Cancel
+    </button>
+    <button class="btn btn-success" type="submit">Save</button>
+  </div>
+</form>
+<%- include('common/footer') -%>

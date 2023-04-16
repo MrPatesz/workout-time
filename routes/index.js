@@ -11,7 +11,6 @@ const deleteExerciseMW = require('../middleware/exercise/deleteExerciseMW');
 module.exports = (app) => {
   const objRepo = {};
 
-  app.get('/workouts', getWorkoutsMW(objRepo), renderMW(objRepo, 'workouts'));
   app.use(
     '/workouts/new',
     saveWorkoutMW(objRepo),
@@ -28,13 +27,8 @@ module.exports = (app) => {
     getWorkoutMW(objRepo),
     deleteWorkoutMW(objRepo)
   );
+  app.get('/workouts', getWorkoutsMW(objRepo), renderMW(objRepo, 'workouts'));
 
-  app.get(
-    '/exercises/:workoutId',
-    getWorkoutMW(objRepo),
-    getExercisesMW(objRepo),
-    renderMW(objRepo, 'exercises')
-  );
   app.use(
     '/exercises/:workoutId/new',
     getWorkoutMW(objRepo),
@@ -53,5 +47,11 @@ module.exports = (app) => {
     getWorkoutMW(objRepo),
     getExerciseMW(objRepo),
     deleteExerciseMW(objRepo)
+  );
+  app.get(
+    '/exercises/:workoutId',
+    getWorkoutMW(objRepo),
+    getExercisesMW(objRepo),
+    renderMW(objRepo, 'exercises')
   );
 };

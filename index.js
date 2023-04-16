@@ -3,12 +3,13 @@ const routing = require('./routes/index');
 
 const app = express();
 
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({extended: true}));
+
 app.all('/', (_req, res, next) => {
-  res.redirect('/workouts.html');
+  res.redirect('/workouts');
   return next();
 });
-
-app.use(express.static('pages'));
 
 routing(app);
 

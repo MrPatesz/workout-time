@@ -1,3 +1,5 @@
+const mockedWorkouts = require('../../mock/workouts');
+
 /**
  * @description Load all workouts from the database.
  * The result is saved to res.locals.workouts.
@@ -6,7 +8,7 @@
  */
 module.exports = (objRepo) => {
   return (req, res, next) => {
-    // TODO
+    res.locals.workouts = mockedWorkouts;
     return next();
   };
 };

@@ -1,0 +1,49 @@
+<%- include('common/header') -%>
+<div class="d-flex justify-content-between mb-2">
+  <h2>
+    Exercises -
+    <a href="/workouts"><%= workout.name %></a>
+  </h2>
+  <button
+    class="btn btn-primary"
+    onclick="location.href='/exercises/<%= workout._id %>/new'"
+  >
+    <i class="bi bi-plus-lg"></i>
+  </button>
+</div>
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Target Muscles</th>
+      <th>Sets</th>
+      <th>Reps</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% exercises.forEach((exercise) => { %>
+    <tr>
+      <td><%= exercise.name %></td>
+      <td><%= exercise.targetMuscles %></td>
+      <td><%= exercise.sets %></td>
+      <td><%= exercise.reps %></td>
+      <td>
+        <button
+          class="btn btn-sm btn-success"
+          onclick="location.href='/exercises/<%= workout._id %>/edit/<%= exercise._id %>'"
+        >
+          <i class="bi bi-pencil-fill"></i>
+        </button>
+        <button
+          class="btn btn-sm btn-danger"
+          onclick="location.href='/exercises/<%= workout._id %>/delete/<%= exercise._id %>'"
+        >
+          <i class="bi bi-trash-fill"></i>
+        </button>
+      </td>
+    </tr>
+    <% }); %>
+  </tbody>
+</table>
+<%- include('common/footer') -%>
