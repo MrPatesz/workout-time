@@ -1,57 +1,63 @@
-const renderMW = require('../middleware/renderMW');
-const getWorkoutsMW = require('../middleware/workout/getWorkoutsMW');
-const getWorkoutMW = require('../middleware/workout/getWorkoutMW');
-const saveWorkoutMW = require('../middleware/workout/saveWorkoutMW');
-const deleteWorkoutMW = require('../middleware/workout/deleteWorkoutMW');
-const getExercisesMW = require('../middleware/exercise/getExercisesMW');
-const getExerciseMW = require('../middleware/exercise/getExerciseMW');
-const saveExerciseMW = require('../middleware/exercise/saveExerciseMW');
-const deleteExerciseMW = require('../middleware/exercise/deleteExerciseMW');
+const renderMW = require("../middleware/renderMW");
+const getWorkoutsMW = require("../middleware/workout/getWorkoutsMW");
+const getWorkoutMW = require("../middleware/workout/getWorkoutMW");
+const saveWorkoutMW = require("../middleware/workout/saveWorkoutMW");
+const deleteWorkoutMW = require("../middleware/workout/deleteWorkoutMW");
+const getExercisesMW = require("../middleware/exercise/getExercisesMW");
+const getExerciseMW = require("../middleware/exercise/getExerciseMW");
+const saveExerciseMW = require("../middleware/exercise/saveExerciseMW");
+const deleteExerciseMW = require("../middleware/exercise/deleteExerciseMW");
+
+const WorkoutModel = require("../models/workout");
+const ExerciseModel = require("../models/exercise");
 
 module.exports = (app) => {
-  const objRepo = {};
+  const objRepo = {
+    WorkoutModel,
+    ExerciseModel,
+  };
 
   app.use(
-    '/workouts/new',
+    "/workouts/new",
     saveWorkoutMW(objRepo),
-    renderMW(objRepo, 'workout')
+    renderMW(objRepo, "workout")
   );
   app.use(
-    '/workouts/edit/:workoutId',
+    "/workouts/edit/:workoutId",
     getWorkoutMW(objRepo),
     saveWorkoutMW(objRepo),
-    renderMW(objRepo, 'workout')
+    renderMW(objRepo, "workout")
   );
   app.get(
-    '/workouts/delete/:workoutId',
+    "/workouts/delete/:workoutId",
     getWorkoutMW(objRepo),
     deleteWorkoutMW(objRepo)
   );
-  app.get('/workouts', getWorkoutsMW(objRepo), renderMW(objRepo, 'workouts'));
+  app.get("/workouts", getWorkoutsMW(objRepo), renderMW(objRepo, "workouts"));
 
   app.use(
-    '/exercises/:workoutId/new',
+    "/exercises/:workoutId/new",
     getWorkoutMW(objRepo),
     saveExerciseMW(objRepo),
-    renderMW(objRepo, 'exercise')
+    renderMW(objRepo, "exercise")
   );
   app.use(
-    '/exercises/:workoutId/edit/:exerciseId',
+    "/exercises/:workoutId/edit/:exerciseId",
     getWorkoutMW(objRepo),
     getExerciseMW(objRepo),
     saveExerciseMW(objRepo),
-    renderMW(objRepo, 'exercise')
+    renderMW(objRepo, "exercise")
   );
   app.get(
-    '/exercises/:workoutId/delete/:exerciseId',
+    "/exercises/:workoutId/delete/:exerciseId",
     getWorkoutMW(objRepo),
     getExerciseMW(objRepo),
     deleteExerciseMW(objRepo)
   );
   app.get(
-    '/exercises/:workoutId',
+    "/exercises/:workoutId",
     getWorkoutMW(objRepo),
     getExercisesMW(objRepo),
-    renderMW(objRepo, 'exercises')
+    renderMW(objRepo, "exercises")
   );
 };

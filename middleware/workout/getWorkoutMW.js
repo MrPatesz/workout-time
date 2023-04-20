@@ -1,4 +1,4 @@
-const mockedWorkouts = require('../../mock/workouts');
+const requireOption = require("../requireOption");
 
 /**
  * @description Load a workout from the database using the :workoutId param.
@@ -7,9 +7,19 @@ const mockedWorkouts = require('../../mock/workouts');
  * @returns {Function}
  */
 module.exports = (objRepo) => {
+  const WorkoutModel = requireOption(objRepo, "WorkoutModel");
+
   return (req, res, next) => {
-    const workoutId = parseInt(req.params.workoutId);
-    res.locals.workout = mockedWorkouts.find((w) => w._id === workoutId);
-    return next();
+    const workoutId = req.params.workoutId;
+    WorkoutModel.findOne({ _id: workoutId })
+      .then((workout) => {
+        if (!workout) {
+          throw new Error(`Could not find workout with id: ${workoutId}`);
+        }
+
+        res.locals.workout = workout;
+        return next();
+      })
+      .catch((err) => next(err));
   };
 };

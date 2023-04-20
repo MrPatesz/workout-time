@@ -1,4 +1,4 @@
-const mockedExercises = require('../../mock/exercises');
+const requireOption = require("../requireOption");
 
 /**
  * @description Load all exercises from the database.
@@ -7,11 +7,18 @@ const mockedExercises = require('../../mock/exercises');
  * @returns {Function}
  */
 module.exports = (objRepo) => {
-  return (req, res, next) => {
-    const workoutId = parseInt(req.params.workoutId);
-    res.locals.exercises = mockedExercises.filter(
-      (e) => e.workoutId === workoutId
-    );
-    return next();
+  const ExerciseModel = requireOption(objRepo, "ExerciseModel");
+
+  return (_req, res, next) => {
+    if (typeof res.locals.workout === "undefined") {
+      return next();
+    }
+
+    ExerciseModel.find({ _workout: res.locals.workout._id })
+      .then((exercises) => {
+        res.locals.exercises = exercises;
+        return next();
+      })
+      .catch((err) => next(err));
   };
 };

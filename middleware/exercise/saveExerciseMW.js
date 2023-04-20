@@ -1,4 +1,4 @@
-const mockedExercises = require('../../mock/exercises');
+const requireOption = require("../requireOption");
 
 /**
  * @description Using POST params update or save an exercise to the database.
@@ -8,38 +8,40 @@ const mockedExercises = require('../../mock/exercises');
  * @returns {Function}
  */
 module.exports = (objRepo) => {
+  const ExerciseModel = requireOption(objRepo, "ExerciseModel");
+
   return (req, res, next) => {
     if (
       !req.body.name ||
       !req.body.targetMuscles ||
       !req.body.sets ||
-      !req.body.reps
+      !req.body.reps ||
+      !res.locals.workout
     ) {
       return next();
     }
 
-    const workoutId = parseInt(res.locals.workout._id);
-    const isUpdate = typeof res.locals.exercise !== 'undefined';
-    const exerciseId = isUpdate
-      ? res.locals.exercise._id
-      : Math.floor(Math.random() * 999);
+    const workoutId = res.locals.workout._id;
 
-    res.locals.exercise = {
-      _id: exerciseId,
-      workoutId: workoutId,
-      name: req.body.name,
-      targetMuscles: req.body.targetMuscles,
-      sets: req.body.sets,
-      reps: req.body.reps,
-    };
-
-    if (isUpdate) {
-      const index = mockedExercises.findIndex((e) => e._id === exerciseId);
-      mockedExercises.splice(index, 1, res.locals.exercise);
+    if (typeof res.locals.exercise === "undefined") {
+      res.locals.exercise = new ExerciseModel({
+        _workout: workoutId,
+        name: req.body.name,
+        targetMuscles: req.body.targetMuscles,
+        sets: req.body.sets,
+        reps: req.body.reps,
+      });
     } else {
-      mockedExercises.push(res.locals.exercise);
+      res.locals.exercise._workout = workoutId;
+      res.locals.exercise.name = req.body.name;
+      res.locals.exercise.targetMuscles = req.body.targetMuscles;
+      res.locals.exercise.sets = req.body.sets;
+      res.locals.exercise.reps = req.body.reps;
     }
 
-    return res.redirect(`/exercises/${workoutId}`);
+    res.locals.exercise
+      .save()
+      .then(() => res.redirect(`/exercises/${workoutId}`))
+      .catch((err) => next(err));
   };
 };

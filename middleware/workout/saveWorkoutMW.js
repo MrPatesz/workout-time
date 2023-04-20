@@ -1,4 +1,4 @@
-const mockedWorkouts = require('../../mock/workouts');
+const requireOption = require("../requireOption");
 
 /**
  * @description Using POST params update or save a workout to the database.
@@ -8,30 +8,28 @@ const mockedWorkouts = require('../../mock/workouts');
  * @returns {Function}
  */
 module.exports = (objRepo) => {
+  const WorkoutModel = requireOption(objRepo, "WorkoutModel");
+
   return (req, res, next) => {
     if (!req.body.name || !req.body.date || !req.body.length) {
       return next();
     }
 
-    const isUpdate = typeof res.locals.workout !== 'undefined';
-    const workoutId = isUpdate
-      ? res.locals.workout._id
-      : Math.floor(Math.random() * 999);
-
-    res.locals.workout = {
-      _id: workoutId,
-      name: req.body.name,
-      date: req.body.date,
-      length: req.body.length,
-    };
-
-    if (isUpdate) {
-      const index = mockedWorkouts.findIndex((w) => w._id === workoutId);
-      mockedWorkouts.splice(index, 1, res.locals.workout);
+    if (typeof res.locals.workout === "undefined") {
+      res.locals.workout = new WorkoutModel({
+        name: req.body.name,
+        date: req.body.date,
+        length: req.body.length,
+      });
     } else {
-      mockedWorkouts.push(res.locals.workout);
+      res.locals.workout.name = req.body.name;
+      res.locals.workout.date = req.body.date;
+      res.locals.workout.length = req.body.length;
     }
 
-    return res.redirect('/workouts');
+    res.locals.workout
+      .save()
+      .then(() => res.redirect("/workouts"))
+      .catch((err) => next(err));
   };
 };

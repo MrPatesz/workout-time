@@ -18,7 +18,7 @@
     <% workouts.forEach((workout) => { %>
     <tr>
       <td><%= workout.name %></td>
-      <td><%= workout.date %></td>
+      <td><%= workout.date.toLocaleDateString() %></td>
       <td><%= workout.length %></td>
       <td>
         <button

@@ -1,4 +1,4 @@
-const mockedWorkouts = require('../../mock/workouts');
+const requireOption = require("../requireOption");
 
 /**
  * @description Load all workouts from the database.
@@ -7,8 +7,14 @@ const mockedWorkouts = require('../../mock/workouts');
  * @returns {Function}
  */
 module.exports = (objRepo) => {
-  return (req, res, next) => {
-    res.locals.workouts = mockedWorkouts;
-    return next();
+  const WorkoutModel = requireOption(objRepo, "WorkoutModel");
+
+  return (_req, res, next) => {
+    WorkoutModel.find({})
+      .then((workouts) => {
+        res.locals.workouts = workouts;
+        return next();
+      })
+      .catch((err) => next(err));
   };
 };

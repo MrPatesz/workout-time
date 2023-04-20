@@ -18,9 +18,10 @@
     <label class="form-label" for="date">Date</label>
     <input
       class="form-control"
+      type="date" 
       id="date"
       name="date"
-      value="<%= (typeof workout === 'undefined') ? '' : workout.date %>"
+      value="<%= (typeof workout === 'undefined') ? '' : workout.date.toISOString().split('T')[0] %>"
     />
   </div>
 

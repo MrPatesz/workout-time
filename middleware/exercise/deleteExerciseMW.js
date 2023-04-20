@@ -1,5 +1,3 @@
-const mockedExercises = require('../../mock/exercises');
-
 /**
  * @description Removes an exercise from the database, the entity used here is: res.locals.exercise.
  * Redirects to /exercises/:workoutId after delete.
@@ -7,12 +5,17 @@ const mockedExercises = require('../../mock/exercises');
  * @returns {Function}
  */
 module.exports = (objRepo) => {
-  return (req, res) => {
-    const exerciseId = parseInt(req.params.exerciseId);
-    const index = mockedExercises.findIndex((e) => e._id === exerciseId);
-    mockedExercises.splice(index, 1);
+  return (_req, res, next) => {
+    if (
+      typeof res.locals.exercise === "undefined" ||
+      typeof res.locals.workout === "undefined"
+    ) {
+      return next();
+    }
 
-    const workoutId = parseInt(req.params.workoutId);
-    return res.redirect(`/exercises/${workoutId}`);
+    res.locals.exercise
+      .deleteOne()
+      .then(() => res.redirect(`/exercises/${res.locals.workout._id}`))
+      .catch((err) => next(err));
   };
 };
