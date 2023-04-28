@@ -1,6 +1,6 @@
 {
   "name": "workout-time",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Szerver oldali JavaScript házi feladat.",
   "main": "index.js",
   "scripts": {
@@ -14,6 +14,8 @@
     "mongoose": "^7.0.4"
   },
   "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
     "rome": "^12.0.0"
   }
 }

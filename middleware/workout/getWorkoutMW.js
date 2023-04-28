@@ -14,7 +14,7 @@ module.exports = (objRepo) => {
     WorkoutModel.findOne({ _id: workoutId })
       .then((workout) => {
         if (!workout) {
-          throw new Error(`Could not find workout with id: ${workoutId}`);
+          next(new Error(`Could not find workout with id: ${workoutId}`));
         }
 
         res.locals.workout = workout;
